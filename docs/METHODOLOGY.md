@@ -89,6 +89,11 @@ excluded from delay and jitter statistics.
 - FlowMonitor's `lostPackets` treats packets still in flight at the end as
   lost only after a timeout. The 2 s drain period reduces, but does not remove,
   this effect.
+- A TCP goodput bin can briefly exceed the link rate (for example 5.37 Mbps
+  in tcp-bulk at 1.5-2.0 s). After a loss, the receiver holds out-of-order
+  segments until the retransmission fills the gap. It then hands them all to
+  the application at once. This is head-of-line blocking, not a measurement
+  error. The 9 s window average is unaffected.
 - TCP loss is not reported as a percentage of application data lost. TCP
   retransmits, so all data that arrives is delivered. The cost of congestion
   appears as lower goodput, queue drops and cwnd reductions instead.

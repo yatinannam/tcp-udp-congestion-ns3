@@ -1,0 +1,7 @@
+=== mixed (mode=mixed) ===
+Bottleneck: 5 Mbps, 10 ms, FIFO 50 packets
+Goodput window: 1-10 s (9 s)
+[TCP BulkSend] goodput 1.845 Mbps, rx 2204672 B total, delay 68.16 ms, jitter 1.770 ms
+[UDP OnOff] requested 3.000 Mbps, goodput 2.958 Mbps, rx 3359744 B total, tx 3295 pkts, rx 3281 pkts, loss 0.425 %, delay 69.66 ms, jitter 1.436 ms
+Bottleneck queue drops: 44 (device queue drops 0)
+Cwnd samples: 1092

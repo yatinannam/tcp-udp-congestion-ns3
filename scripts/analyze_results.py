@@ -33,6 +33,7 @@ plt.rcParams.update({
     "axes.spines.top": False,
     "axes.spines.right": False,
     "axes.grid": True,
+    "axes.axisbelow": True,
     "grid.color": "#e4e3df",
     "grid.linewidth": 0.8,
     "xtick.color": INK,
@@ -187,7 +188,7 @@ def plot_baseline_delay_jitter(summary, out_dir):
         return skip(name, "need delay and jitter for both baseline flows")
     fig, (a1, a2) = plt.subplots(1, 2, figsize=(8, 4.2))
     for ax, vals, label, fmt in ((a1, delays, "Mean one-way delay (ms)", "{:.2f}"),
-                                 (a2, jitters, "Mean jitter (ms)", "{:.3f}")):
+                                 (a2, jitters, "Mean jitter (ms)", "{:.4f}")):
         bars = ax.bar([LABELS[f] for f in flows], vals, width=0.5, color=[COLORS[f] for f in flows])
         bar_labels(ax, bars, vals, fmt)
         ax.set(ylabel=label, ylim=(0, max(vals) * 1.3 if max(vals) > 0 else 1))

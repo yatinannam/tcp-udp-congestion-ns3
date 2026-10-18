@@ -150,12 +150,24 @@ are no duplicates. Other runs' rows are kept.
 
 ### Observations
 
-_Fill in after running the full suite. Use the numbers in `results/summary.csv`._
+Measured with the default parameters on NS-3.49 (`results/summary.csv`). Re-running reproduces them exactly.
 
-- Baseline: ...
-- UDP sweep: ...
-- TCP bulk: ...
-- Mixed: ...
+- **Baseline (2 Mbps on 20 Mbps):** TCP 1.992 Mbps, UDP 1.997 Mbps goodput. Both
+  have about 12.6 ms mean delay (12 ms propagation plus transmission time),
+  jitter near 0, and no queue drops. There is no congestion, so the
+  protocols behave almost identically.
+- **UDP sweep (5 Mbps bottleneck):** at 2 Mbps offered, 1.996 Mbps was delivered
+  with 0% loss and 13.9 ms delay. At 5 Mbps, 4.850 Mbps was delivered with 1.9%
+  loss and 85 ms delay. The 5 Mbps payload plus headers is about 5.15 Mbps on the
+  wire, slightly above capacity. At 8 Mbps, 4.850 Mbps was delivered with 38.7%
+  loss and 98 ms delay. Delivered goodput is capped at about 4.85 Mbps, which is
+  5 Mbps x 1024/1054 bytes of payload per frame. The queue stays full, so delay
+  is capped near 50 packets of queueing.
+- **TCP bulk:** 4.724 Mbps goodput and 35 queue drops. The congestion window
+  shows slow start, then a loss, then NewReno's additive-increase sawtooth.
+- **Mixed (bulk TCP + 3 Mbps UDP):** UDP 2.958 Mbps (0.4% loss), TCP 1.845 Mbps,
+  4.80 Mbps in total. TCP backed off and took the capacity the unresponsive UDP
+  flow left, while UDP kept close to its configured rate.
 
 ## Project layout
 

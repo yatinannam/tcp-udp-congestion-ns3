@@ -1,0 +1,6 @@
+=== baseline-tcp (mode=baseline) ===
+Bottleneck: 20 Mbps, 10 ms, FIFO 50 packets
+Goodput window: 1-10 s (9 s)
+[TCP OnOff] requested 2 Mbps, goodput 1.992 Mbps, rx 2243584 B total, delay 12.60 ms, jitter 0.001 ms
+Bottleneck queue drops: 0 (device queue drops 0)
+Cwnd samples: 1098

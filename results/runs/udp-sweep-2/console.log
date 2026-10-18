@@ -1,0 +1,5 @@
+=== udp-sweep-2 (mode=udp-sweep) ===
+Bottleneck: 5 Mbps, 10 ms, FIFO 50 packets
+Goodput window: 1-10 s (9 s)
+[UDP OnOff] requested 2 Mbps, goodput 1.996 Mbps, rx 2249728 B total, tx 2197 pkts, rx 2197 pkts, loss 0.000 %, delay 13.86 ms, jitter 0.000 ms
+Bottleneck queue drops: 0 (device queue drops 0)

@@ -1,0 +1,6 @@
+=== tcp-bulk (mode=tcp-bulk) ===
+Bottleneck: 5 Mbps, 10 ms, FIFO 50 packets
+Goodput window: 1-10 s (9 s)
+[TCP BulkSend] goodput 4.724 Mbps, rx 5438464 B total, delay 76.51 ms, jitter 1.713 ms
+Bottleneck queue drops: 35 (device queue drops 0)
+Cwnd samples: 2667
