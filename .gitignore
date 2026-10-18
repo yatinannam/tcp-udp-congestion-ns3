@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.venv/
+# Raw per-run output can be regenerated; pcaps can be large.
+results/runs/*/*.pcap
