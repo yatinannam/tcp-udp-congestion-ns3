@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loadResults } from './lib/data';
+import { loadLab } from './lib/lab';
+import Lab from './sections/Lab';
 import { useSmoothScroll } from './lib/motion';
 import Hero, { Nav } from './sections/Hero';
 import Setup from './sections/Setup';
@@ -11,18 +13,45 @@ import Method from './sections/Method';
 
 export default function App() {
   const [data, setData] = useState(null);
+  const [lab, setLab] = useState(undefined);
   const [error, setError] = useState(null);
+  const [view, setView] = useState(() => (window.location.hash === '#report' ? 'report' : 'lab'));
   useSmoothScroll();
 
   useEffect(() => {
     loadResults().then(setData).catch((e) => setError(e.message));
+    loadLab().then(setLab);
+    const onHash = () => setView(window.location.hash === '#report' ? 'report' : 'lab');
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
 
   if (error) {
     return <p className="p-8 text-ink">Could not load the results: {error}</p>;
   }
-  if (!data) {
+  if (!data || lab === undefined) {
     return <p className="p-8 text-muted">Loading simulation results…</p>;
+  }
+  if (view === 'lab') {
+    return (
+      <>
+        <Nav view="lab" />
+        {lab ? (
+          <Lab lab={lab} />
+        ) : (
+          <main className="mx-auto max-w-2xl px-4 py-24">
+            <h1 className="display text-4xl">Lab data missing</h1>
+            <p className="mt-4 text-muted">
+              Run <code>python3 scripts/build_lab_dataset.py</code> in WSL, then <code>npm run sync</code> here and reload.
+            </p>
+          </main>
+        )}
+      </>
+    );
   }
   if (!data.summary.length) {
     return (
@@ -38,7 +67,7 @@ export default function App() {
 
   return (
     <>
-      <Nav />
+      <Nav view="report" />
       <Hero data={data} />
       <main>
         <Setup data={data} />

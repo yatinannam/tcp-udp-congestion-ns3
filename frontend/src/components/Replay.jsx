@@ -239,7 +239,7 @@ function drawScene(ctx, model, sim, scale, L) {
     const tx = f === 'tcp' ? n.tcpTx : n.udpTx;
     const rx = f === 'tcp' ? n.tcpRx : n.udpRx;
     const requested = num(model.rows[f].requested_rate_mbps);
-    const offered = requested !== null ? `${requested} Mbps offered` : L.vertical ? 'adaptive rate' : 'sends as fast as TCP allows';
+    const offered = requested !== null ? `${requested} Mbps offered` : 'adaptive rate';
     text(offered, tx.x, L.vertical ? tx.y - 32 : tx.y + 60);
     const g = sim.snap.goodput[f];
     text(g == null ? 'no data' : `${g.toFixed(2)} Mbps received`, rx.x, rx.y + 60);
@@ -291,9 +291,21 @@ function stepParticles(sim, model, dt, L) {
   sim.particles = sim.particles.filter((p) => (p.kind === 'drop' ? p.age < p.life : p.dist < p.len));
 }
 
-export default function Replay({ data }) {
-  const available = useMemo(() => RUNS.filter((r) => data.timeseries.some((row) => row.run_id === r.id)), [data]);
-  const [runId, setRunId] = useState(() => (available.find((r) => r.id === 'udp-sweep-8') ?? available[0])?.id);
+/**
+ * Replays one run's measured time series.
+ * Report mode: shows a picker over the standard runs and autoplays when scrolled into view.
+ * Lab mode (fixedRunId): plays that run straight away and calls onFinish at the end.
+ */
+export default function Replay({ data, fixedRunId = null, autoplay = 'view', onFinish }) {
+  const available = useMemo(
+    () => (fixedRunId ? [] : RUNS.filter((r) => data.timeseries.some((row) => row.run_id === r.id))),
+    [data, fixedRunId],
+  );
+  const [runId, setRunId] = useState(
+    () => fixedRunId ?? (available.find((r) => r.id === 'udp-sweep-8') ?? available[0])?.id,
+  );
+  const onFinishRef = useRef(onFinish);
+  onFinishRef.current = onFinish;
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [readout, setReadout] = useState({ t: 0, snap: null });
@@ -322,10 +334,19 @@ export default function Replay({ data }) {
     [model],
   );
 
-  useEffect(() => resetSim(0), [resetSim]);
-
-  // Autoplay once the console scrolls into view (not with reduced motion).
   useEffect(() => {
+    resetSim(0);
+  }, [resetSim]);
+
+  // Autoplay: immediately in the lab, or once the console scrolls into view.
+  useEffect(() => {
+    if (autoplay === 'now') {
+      if (prefersReducedMotion()) {
+        resetSim(model?.simStop ?? 0); // jump to the end result instead of animating
+        onFinishRef.current?.();
+      } else setPlaying(true);
+      return undefined;
+    }
     if (prefersReducedMotion() || !wrapRef.current) return undefined;
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting) {
@@ -380,7 +401,10 @@ export default function Replay({ data }) {
           sim.lastReadout = sim.t;
           setReadout({ t: sim.t, snap: sim.snap, runId: model.runId });
         }
-        if (sim.t >= model.simStop) setPlaying(false);
+        if (sim.t >= model.simStop) {
+          setPlaying(false);
+          onFinishRef.current?.();
+        }
       }
       drawScene(ctx, model, sim, scale, L);
     };
@@ -415,6 +439,7 @@ export default function Replay({ data }) {
 
   return (
     <div ref={wrapRef} className="rounded-2xl border border-rule bg-panel/80 shadow-[0_1px_0_rgb(19_35_58/0.04)]">
+      {available.length > 0 && (
       <div className="flex flex-wrap gap-1.5 border-b border-rule p-3" role="group" aria-label="Choose an experiment run">
         {available.map((r) => (
           <button
@@ -433,6 +458,7 @@ export default function Replay({ data }) {
           </button>
         ))}
       </div>
+      )}
 
       <canvas
         ref={canvasRef}

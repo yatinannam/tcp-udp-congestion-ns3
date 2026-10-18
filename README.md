@@ -152,7 +152,20 @@ npm run dev          # http://localhost:5173
 npm run build        # static site in frontend/dist (opens from any folder)
 ```
 
-The hero replays any run's measured time series. Packets cross the topology,
+The site opens on the **Lab** tab, an interactive playground. Visitors set the
+bottleneck speed, router buffer, link delay, the TCP sender and the UDP rate.
+They predict the result, run it, and earn XP by completing missions such as
+causing bufferbloat or starving TCP. Progress is saved in the browser. Every
+Lab result is a real NS-3 run: `scripts/build_lab_dataset.py` simulates all
+684 knob combinations ahead of time (about 3 minutes in WSL) and writes
+`results/lab/lab-data.json` plus `results/lab/lab-summary.csv`:
+
+```bash
+python3 scripts/build_lab_dataset.py      # in WSL, with NS3_ROOT set
+```
+
+The **Report** tab is the guided write-up of the 7 main experiments. Its hero
+replays any run's measured time series. Packets cross the topology,
 the Router A queue fills to its measured occupancy, and drops fall away at the
 measured rate. After re-running an experiment in WSL, refresh the page to see
 the new numbers (or run `npm run sync` if the dev server is not running).

@@ -11,27 +11,42 @@ const NAV = [
   ['method', 'Method'],
 ];
 
-export function Nav() {
+export function Nav({ view }) {
+  const tab = (id, label) => (
+    <a
+      href={id === 'lab' ? '#lab' : '#report'}
+      aria-current={view === id ? 'page' : undefined}
+      className={`rounded-full px-3 py-1 text-sm font-medium ${view === id ? 'bg-ink text-panel' : 'text-ink hover:bg-rule/60'}`}
+    >
+      {label}
+    </a>
+  );
   return (
-    <nav className="sticky top-0 z-20 border-b border-rule/70 bg-paper/85 backdrop-blur" aria-label="Sections">
-      <div className="mx-auto flex max-w-6xl items-center gap-6 overflow-x-auto px-4 py-3 sm:px-8">
+    <nav className="sticky top-0 z-20 border-b border-rule/70 bg-paper/85 backdrop-blur" aria-label="Main">
+      <div className="mx-auto flex max-w-6xl items-center gap-5 overflow-x-auto px-4 py-2.5 sm:px-8">
         <span className="condensed shrink-0 font-bold">TCP vs UDP</span>
-        <ul className="flex gap-4 text-sm text-muted">
-          {NAV.map(([id, label]) => (
-            <li key={id} className="shrink-0">
-              <a
-                href={`#${id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToId(id);
-                }}
-                className="hover:text-ink"
-              >
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="flex shrink-0 gap-1">
+          {tab('lab', 'Lab')}
+          {tab('report', 'Report')}
+        </div>
+        {view === 'report' && (
+          <ul className="flex gap-4 text-sm text-muted">
+            {NAV.map(([id, label]) => (
+              <li key={id} className="shrink-0">
+                <a
+                  href={`#${id}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToId(id);
+                  }}
+                  className="hover:text-ink"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </nav>
   );
