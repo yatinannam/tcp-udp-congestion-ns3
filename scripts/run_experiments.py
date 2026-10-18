@@ -202,7 +202,8 @@ def merge_results(results_dir, succeeded, failed):
             continue
         rows.sort(key=lambda r: run_order(r.get("run_id", "")))  # stable: keeps time order
         with open(dest, "w", newline="") as fh:
-            writer = csv.DictWriter(fh, fieldnames=header, restval="", extrasaction="ignore")
+            writer = csv.DictWriter(fh, fieldnames=header, restval="", extrasaction="ignore",
+                                    lineterminator="\n")
             writer.writeheader()
             writer.writerows(rows)
 

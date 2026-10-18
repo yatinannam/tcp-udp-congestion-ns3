@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+
+  --color-paper: #eef2f5;
+  --color-panel: #f8fafb;
+  --color-ink: #13233a;
+  --color-muted: #566579;
+  --color-rule: #cad4dd;
+  --color-tcp: #2a78d6;
+  --color-udp: #eb6834;
+  --color-queue: #1baf7a;
+  --color-drop: #8a97a6;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+}
+
+/* Lenis recommended base styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Expanded heavy Archivo: the display voice. */
+.display {
+  font-stretch: 125%;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.02;
+}
+
+.condensed {
+  font-stretch: 75%;
+}
+
+@media (min-width: 640px) {
+  .replay-stats {
+    grid-template-columns: repeat(var(--cells), minmax(0, 1fr));
+  }
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Faint plotting grid behind the hero, echoing the measured charts. */
+.plot-grid {
+  background-image:
+    linear-gradient(to right, rgb(19 35 58 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(19 35 58 / 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-tcp);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: rgb(42 120 214 / 0.2);
+}
+
+code {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.86em;
+}

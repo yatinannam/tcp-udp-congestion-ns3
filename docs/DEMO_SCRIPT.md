@@ -9,11 +9,17 @@ export NS3_ROOT=~/ns-3.49
 python3 scripts/run_experiments.py          # before the demo (~1 minute)
 ```
 
+Also start the results site on Windows (`cd frontend`, then `npm run dev`) and
+open http://localhost:5173. Each section below matches a section of the
+site. The matplotlib PNGs in `results/plots/` are the backup and are the
+version for your report.
+
 ## 0. Topology (30 s)
 
-Show the ASCII diagram in `README.md`. Point out that both senders share the
-RouterA -> RouterB link and that the access links are much faster, so the
-queue builds only at RouterA.
+Open the site's replay and pick **UDP 8 Mbps**. It replays the measured run:
+both senders share the Router A -> Router B link, the access links are much
+faster, so the queue fills only at Router A, and the grey dots are drops.
+The ASCII diagram in `README.md` shows the same topology.
 
 ## 1. Low-load baseline (1 min)
 
@@ -74,8 +80,8 @@ python3 scripts/run_experiments.py --only mixed --set queuePackets=10
 python3 scripts/run_experiments.py --only mixed --set udpRateMbps=4.5
 ```
 
-Ask the audience to predict the result first, then compare the charts. Re-run
-without `--set` to restore the default results.
+Ask the audience to predict the result first, then refresh the site (or open
+the PNGs) and compare. Re-run without `--set` to restore the default results.
 
 ## Why real results may differ from expectations
 

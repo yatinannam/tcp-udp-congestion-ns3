@@ -135,6 +135,28 @@ Invalid values (an unknown mode, a non-positive rate, `appStart >= appStop`,
 `simStop <= appStop`, a queue < 1, or access links no faster than the
 bottleneck) stop the program with an error message.
 
+## Results website (frontend)
+
+`frontend/` is a single-page site (Vite, React, Tailwind, GSAP, Lenis and
+ReactBits components) that presents the measured results. It reads the merged
+CSVs only: `npm run sync` copies `results/*.csv` into `frontend/public/data/`,
+and this runs automatically before `dev` and `build`. Any experiment that
+hasn't been run shows an empty panel with the command to run it.
+
+It runs on Windows with Node.js (v24 is installed). WSL is not needed.
+
+```powershell
+cd frontend
+npm install          # first time only
+npm run dev          # http://localhost:5173
+npm run build        # static site in frontend/dist (opens from any folder)
+```
+
+The hero replays any run's measured time series. Packets cross the topology,
+the Router A queue fills to its measured occupancy, and drops fall away at the
+measured rate. After re-running an experiment in WSL, refresh the page to see
+the new numbers (or run `npm run sync` if the dev server is not running).
+
 ## Results and output files
 
 | Path | Contents |
@@ -179,6 +201,7 @@ scripts/analyze_results.py           charts from the CSVs
 docs/METHODOLOGY.md                  variables, formulas, limitations
 docs/DEMO_SCRIPT.md                  five-minute demo walkthrough
 results/                             generated output
+frontend/                            results website (React + GSAP + Lenis)
 ```
 
 ## References
